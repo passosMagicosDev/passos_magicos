@@ -6,7 +6,7 @@ import Logo from "@/public/imgs/logo.png";
 export default function App() {
   return (
     <main className="min-h-screen bg-background-gray flex items-center justify-center">
-      <div className="max-w-[1372px] px-4 flex items-center h-full justify-between mx-auto py-5 gap-20">
+      <div className="max-w-[1372px] px-4 flex items-center h-full justify-between mx-auto gap-20">
         <div className="max-w-[571px]">
           <h1 className="text-6xl text-text-dark mb-5">
             Já faz parte do nosso Voluntariado?
@@ -30,7 +30,7 @@ export default function App() {
             className="absolute left-10 top-10"
           />
           <Image
-            className="h-auto"
+            className="max-h-[calc(100vh-40px)] object-cover"
             quality={100}
             src={Volunataria}
             alt="Mulher se volunatariando para projeto"
