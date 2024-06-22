@@ -8,10 +8,10 @@ export default function App() {
     <main className="min-h-screen bg-background-gray flex items-center justify-center">
       <div className="max-w-[1372px] px-4 flex items-center h-full justify-between mx-auto gap-20">
         <div className="max-w-[571px]">
-          <h1 className="text-6xl text-text-dark mb-5">
+          <h1 className="text-6xl text-text-dark">
             Já faz parte do nosso Voluntariado?
           </h1>
-          <p className="text-text-medium text-2xl mb-5">
+          <p className="text-text-medium text-2xl my-8">
             Se já recebeu nosso convite, clique no botão abaixo e acesse nosso
             cronograma agora mesmo!
           </p>
