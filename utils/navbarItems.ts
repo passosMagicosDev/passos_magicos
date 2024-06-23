@@ -12,12 +12,6 @@ export const itemsNavBar = [
     url: "/app",
   },
   {
-    img: Faq,
-    item: "Faq",
-    active: false,
-    url: "/cadastrar-evento",
-  },
-  {
     img: QueroDoar,
     item: "Cadastrar voluntário",
     active: false,
