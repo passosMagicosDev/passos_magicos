@@ -3,8 +3,8 @@ import React from "react";
 import BannerAzul from "@/public/imgs/banner_azul.png";
 import Criancas from "@/public/imgs/criancas.png";
 import Logo from "@/public/imgs/logo.png";
-
 import Image from "next/image";
+import FormLogin from "@/components/formLogin";
 
 function Login() {
   return (
@@ -46,45 +46,11 @@ function Login() {
           <h2 className="mb-14 text-4xl text-center text-text-dark">
             Acesse sua conta
           </h2>
-          <form action="">
-            <div className="relative float-label-input">
-              <input
-                type="text"
-                id="email"
-                placeholder=""
-                className="w-full bg-white focus:outline-none focus:shadow-outline border border-gray-300 rounded-md py-3 px-3 block appearance-none leading-normal focus:border-blue-400"
-              />
-              <label
-                htmlFor="name"
-                className="absolute top-3 left-0 text-gray-400 pointer-events-none transition duration-200 ease-in-outbg-white px-2 text-grey-darker"
-              >
-                Email
-              </label>
-            </div>
-
-            <div className="relative float-label-input mt-5 mb-10">
-              <input
-                type="text"
-                id="password"
-                placeholder=""
-                className="w-full bg-white focus:outline-none focus:shadow-outline border border-gray-300 rounded-md py-3 px-3 block appearance-none leading-normal focus:border-blue-400"
-              />
-              <label
-                htmlFor="name"
-                className="absolute top-3 left-0 text-gray-400 pointer-events-none transition duration-200 ease-in-outbg-white px-2 text-grey-darker"
-              >
-                Senha
-              </label>
-            </div>
-          </form>
+          <FormLogin />
 
           <Link href="" className="text-xs text-[#0367B0] font-medium">
             Esqueceu a senha?
           </Link>
-
-          <button className="mt-16 bg-[#0367B0] py-3 text-white text-base font-medium rounded">
-            Acessar conta
-          </button>
 
           <label
             htmlFor="newsletter"

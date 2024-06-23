@@ -11,13 +11,13 @@ export default function App() {
           <h1 className="text-6xl text-text-dark">
             Já faz parte do nosso Voluntariado?
           </h1>
-          <p className="text-text-medium text-2xl my-8">
+          <p className="text-text-medium text-base my-8">
             Se já recebeu nosso convite, clique no botão abaixo e acesse nosso
             cronograma agora mesmo!
           </p>
           <Link
             href="/login"
-            className="block w-max py-3 px-10 rounded bg-button-blue text-2xl font-medium text-white"
+            className="block w-max py-3 px-10 rounded bg-button-blue text-base font-medium text-white"
           >
             Acessar Voluntariado
           </Link>
@@ -36,7 +36,7 @@ export default function App() {
             alt="Mulher se volunatariando para projeto"
           />
 
-          <div className="bg-gradient-to-t from-black to-transparent text-white text-2xl pt-44 absolute w-full bottom-0 pb-10 pl-10">
+          <div className="bg-gradient-to-t from-black to-transparent text-white text-base pt-44 absolute w-full bottom-0 pb-10 pl-10">
             <p>Quer fazer parte do nosso Voluntariado?</p>
             <p className="text-base text-white my-4">
               Se você quer fazer parte do nosso time, clique no botão abaixo!
@@ -44,7 +44,7 @@ export default function App() {
 
             <Link
               href="/login"
-              className="block w-max py-3 px-10 rounded bg-transparent text-2xl font-medium text-white border"
+              className="block w-max py-3 px-10 rounded bg-transparent text-base font-medium text-white border"
             >
               Quero ser voluntário
             </Link>

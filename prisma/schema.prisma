@@ -7,9 +7,24 @@ generator client {
   provider = "prisma-client-js"
 }
 
-model User {
-  id       Int     @id @default(autoincrement())
-  email    String  @unique
-  name     String?
-  password String
+model Evento {
+  id              Int    @id @default(autoincrement())
+  nomeEvento      String
+  dataEvento      String
+  horaInicio      String
+  horaFim         String
+  categoriaEvento String
+  localEvento     String
+  descricaoEvento String @db.Text
+}
+
+model Voluntario {
+  id            Int     @id @default(autoincrement())
+  nome          String
+  dataNacimento String
+  telefone      String
+  email         String  @unique
+  areaAtuacao   String
+  senha         String
+  admin         Boolean
 }

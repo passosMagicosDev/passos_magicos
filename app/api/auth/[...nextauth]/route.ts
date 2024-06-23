@@ -23,27 +23,54 @@ const handler = NextAuth({
         credentials: { email: string; password: string } | undefined,
         req
       ) {
-        const user = await prisma.user.findUnique({
+        if (!credentials?.email || !credentials?.password) {
+          throw new Error("Por favor, preencha todos os campos.");
+        }
+
+        const voluntario = await prisma.voluntario.findUnique({
           where: {
-            email: "",
+            email: credentials.email,
           },
         });
 
-        if (!user) return null;
-
-        const passwordMatch = await compare("", user?.password);
-
-        if (passwordMatch) {
-          return {
-            id: user.id.toString(), // Assuming id is a string in User type
-            email: user.email,
-          };
+        if (!voluntario) {
+          throw new Error("E-mail não encontrado.");
         }
 
-        return null;
+        const passwordMatch = await compare(
+          credentials.password,
+          voluntario.senha
+        );
+
+        if (!passwordMatch) {
+          throw new Error("Senha incorreta.");
+        }
+
+        return {
+          id: voluntario.id.toString(), // Assuming id is a string in voluntario type
+          email: voluntario.email,
+        };
       },
     }),
   ],
+
+  callbacks: {
+    async signIn({ user, account, profile, email, credentials }) {
+      return true;
+    },
+    async redirect({ url, baseUrl }) {
+      return baseUrl;
+    },
+    async session({ session, user, token }) {
+      return session;
+    },
+    async jwt({ token, user, account, profile, isNewUser }) {
+      return token;
+    },
+  },
+
+  events: {},
+  debug: false,
 });
 
 export { handler as GET, handler as POST };
