@@ -143,7 +143,7 @@ function CadastrarVoluntarioForm() {
         Cadastrar Voluntário
       </h1>
 
-      <form className="max-w-[800px] py-12 mx-auto" onSubmit={handleSubmit}>
+      <form className="w-full px-5 py-12 mx-auto" onSubmit={handleSubmit}>
         <h2 className="text-3xl mb-6">Dados Gerais</h2>
         {/* Nome */}
         <div className="relative float-label-input mt-5 mb-2">

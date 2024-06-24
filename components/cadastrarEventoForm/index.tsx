@@ -148,7 +148,7 @@ function CadastrarEventoForm() {
         Cadastrar Evento
       </h1>
 
-      <form onSubmit={handleSubmit} className="max-w-[800px] py-12 mx-auto">
+      <form onSubmit={handleSubmit} className="w-full px-5 py-12 mx-auto">
         {/* Nome do Evento */}
 
         <div className="relative float-label-input mt-5 mb-2">
