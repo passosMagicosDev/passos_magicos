@@ -37,6 +37,11 @@ const handler = NextAuth({
           throw new Error("E-mail não encontrado.");
         }
 
+        // Verifica se voluntario.senha é uma string antes de comparar
+        if (typeof voluntario.senha !== "string") {
+          throw new Error("Erro: senha do voluntário inválida.");
+        }
+
         const passwordMatch = await compare(
           credentials.password,
           voluntario.senha
@@ -64,7 +69,7 @@ const handler = NextAuth({
     async session({ session, user, token }) {
       return session;
     },
-    async jwt({ token, user, account, profile, isNewUser }) {
+    async jwt({ token, user, account, profile }) {
       return token;
     },
   },

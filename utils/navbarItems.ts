@@ -12,6 +12,20 @@ export const itemsNavBar = [
     url: "/app",
   },
   {
+    img: Voluntariados,
+    item: "Meus Voluntariados",
+    active: false,
+    url: "/meus-voluntariados",
+  },
+];
+export const itemsNavBarAdmin = [
+  {
+    img: Calendar,
+    item: "Agenda de Voluntariado",
+    active: false,
+    url: "/app",
+  },
+  {
     img: QueroDoar,
     item: "Cadastrar voluntário",
     active: false,

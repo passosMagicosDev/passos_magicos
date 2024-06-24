@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
 import { PrismaClient, Prisma } from "@prisma/client";
-import { hash } from "bcrypt";
 
 const prisma = new PrismaClient();
 
@@ -17,6 +16,29 @@ interface Evento {
 export async function POST(request: Request) {
   const data: Evento = await request.json();
 
+  // Validações
+  if (
+    !data.nomeEvento ||
+    !data.dataEvento ||
+    !data.horaInicio ||
+    !data.horaFim ||
+    !data.categoriaEvento ||
+    !data.localEvento ||
+    !data.descricaoEvento
+  ) {
+    return NextResponse.json(
+      { error: "Todos os campos são obrigatórios" },
+      { status: 400 }
+    );
+  }
+
+  if (data.horaInicio >= data.horaFim) {
+    return NextResponse.json(
+      { error: "Hora de início deve ser menor que hora de fim" },
+      { status: 400 }
+    );
+  }
+
   try {
     await prisma.evento.create({
       data: data,
@@ -24,6 +46,12 @@ export async function POST(request: Request) {
 
     return NextResponse.json({ message: "Cadastrado com sucesso" });
   } catch (error) {
-    return NextResponse.json({ error });
+    if (error instanceof Prisma.PrismaClientKnownRequestError) {
+      return NextResponse.json(
+        { error: "Erro de banco de dados" },
+        { status: 500 }
+      );
+    }
+    return NextResponse.json({ error: "Erro desconhecido" }, { status: 500 });
   }
 }

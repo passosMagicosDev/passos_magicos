@@ -2,12 +2,14 @@
 
 import React, { useState } from "react";
 import { signIn } from "next-auth/react";
-import Router from "next/router";
 import { useRouter } from "next/navigation";
+import useLoading from "@/hooks/Loading";
+import Spinner from "@/public/imgs/icons/spinner.svg";
+import Image from "next/image";
 
 function FormLogin() {
   const router = useRouter();
-
+  const [loading, startLoading, stopLoading] = useLoading();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState<{
@@ -23,6 +25,7 @@ function FormLogin() {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    startLoading();
 
     let valid = true;
     const newErrors: { email?: string; password?: string; general?: string } =
@@ -60,6 +63,8 @@ function FormLogin() {
       router.push("/app");
     } catch (error: any) {
       setErrors({ general: error.message });
+    } finally {
+      stopLoading();
     }
   };
 
@@ -112,9 +117,18 @@ function FormLogin() {
       <button
         type="submit"
         className="mt-8 w-full bg-[#0367B0] py-3 text-white text-base font-medium rounded mb-2"
+        disabled={loading}
       >
-        Acessar conta
+        {loading ? (
+          <span className="flex gap-2 justify-center">
+            Acessando conta...
+            <Image className="animate-spin" src={Spinner} alt="" />
+          </span>
+        ) : (
+          "Acessar conta"
+        )}
       </button>
+
       {errors.general && (
         <p className="text-red-500 text-xs mt-1">{errors.general}</p>
       )}

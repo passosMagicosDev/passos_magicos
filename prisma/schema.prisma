@@ -1,30 +1,44 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
 datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
 }
 
-generator client {
-  provider = "prisma-client-js"
-}
-
 model Evento {
-  id              Int    @id @default(autoincrement())
-  nomeEvento      String
-  dataEvento      String
-  horaInicio      String
-  horaFim         String
-  categoriaEvento String
-  localEvento     String
-  descricaoEvento String @db.Text
+  id                 Int                  @id @default(autoincrement())
+  nomeEvento         String
+  dataEvento         String?
+  horaInicio         String?
+  horaFim            String?
+  categoriaEvento    String?
+  localEvento        String?
+  descricaoEvento    String?              @db.Text
+  inscritos          Voluntario[]         @relation("EventoToVoluntario")
+  EventoToVoluntario EventoToVoluntario[]
 }
 
 model Voluntario {
-  id            Int     @id @default(autoincrement())
-  nome          String
-  dataNacimento String
-  telefone      String
-  email         String  @unique
-  areaAtuacao   String
-  senha         String
-  admin         Boolean
+  id                 Int                  @id @default(autoincrement())
+  nome               String
+  dataNascimento     String?
+  telefone           String?
+  email              String               @unique
+  areaAtuacao        String?
+  senha              String?
+  admin              Boolean?
+  eventos            Evento[]             @relation("EventoToVoluntario")
+  EventoToVoluntario EventoToVoluntario[]
+}
+
+model EventoToVoluntario {
+  id           Int @id @default(autoincrement())
+  eventoId     Int
+  voluntarioId Int
+
+  // Defina as chaves estrangeiras e os relacionamentos
+  evento     Evento     @relation(fields: [eventoId], references: [id])
+  voluntario Voluntario @relation(fields: [voluntarioId], references: [id])
 }

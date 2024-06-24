@@ -1,27 +1,57 @@
 import React from "react";
 import Location from "@/public/imgs/icons/location.svg";
 import Close from "@/public/imgs/icons/close.svg";
-import Check from "@/public/imgs/icons/check.svg";
 
 import Image from "next/image";
+import { Id } from "react-toastify";
+import ButtonModal from "./button";
 
 interface Evento {
-  onModal: boolean;
-  closeModal: () => void;
-  evento: {
-    mes: number;
-    dia: number;
-    title: string;
-    formatted_data: string;
-    hora: string;
-    local: string;
-    desc: string;
-    categoria: string;
-  };
+  idEvento: number;
+  mes: number;
+  dia: number;
+  title: string;
+  formatted_data: string;
+  hora: string;
+  local: string;
+  desc: string;
+  categoria: string;
 }
 
-function Modal({ evento, onModal, closeModal }: Evento) {
-  const inscrito = false;
+interface UserData {
+  email: string | undefined;
+  areaAtuacao: string | null | undefined;
+  admin: boolean | null | undefined;
+  nome: string | undefined;
+  id: number | undefined;
+  eventosCadastrados: {
+    id: number;
+  }[];
+}
+
+interface Props {
+  evento: Evento;
+  onModal: boolean;
+  closeModal: () => void;
+  toastSuccess: (message: string) => Id;
+  toastError: (message: string) => Id;
+  userData: UserData;
+  updateUserData: (eventoId: number) => void;
+}
+
+function Modal({
+  evento,
+  onModal,
+  userData,
+  closeModal,
+  toastError,
+  toastSuccess,
+  updateUserData,
+}: Props) {
+  const verifyInscrito = userData.eventosCadastrados.some(
+    (el) => el.id === evento.idEvento
+  );
+
   return (
     <div
       className={`fixed left-0 top-0 bg-black/30 w-full h-screen z-10 flex items-center justify-center transition-all ${
@@ -30,7 +60,7 @@ function Modal({ evento, onModal, closeModal }: Evento) {
           : " opacity-0 pointer-events-none"
       }`}
     >
-      <div className="bg-[#fff]  max-w-[488px] w-full rounded-[20px] relative">
+      <div className="bg-[#fff] max-w-[488px] w-full rounded-[20px] relative">
         <button onClick={closeModal} className="absolute right-5 top-7">
           <Image src={Close} alt="" />
         </button>
@@ -48,17 +78,15 @@ function Modal({ evento, onModal, closeModal }: Evento) {
           </p>
 
           <p>{evento.desc}</p>
-
-          <button className="flex items-center justify-center gap-2 mx-auto mt-12 text-base text-[#F58334] border-[2px] rounded border-[#F58334] py-2 max-w-[316px] w-full">
-            {inscrito ? (
-              <span>
-                Inscrito com sucesso
-                <Image src={Check} alt="" />
-              </span>
-            ) : (
-              <span>Increva-se para esta ação</span>
-            )}
-          </button>
+          <ButtonModal
+            idEvento={evento.idEvento}
+            idVoluntario={Number(userData.id)}
+            inscrito={verifyInscrito}
+            toastError={toastError}
+            toastSuccess={toastSuccess}
+            updateUserData={updateUserData}
+            userData={userData}
+          />
         </div>
       </div>
     </div>

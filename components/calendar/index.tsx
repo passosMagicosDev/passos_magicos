@@ -8,8 +8,12 @@ import React, { useState } from "react";
 import Image from "next/image";
 import Modal from "../modal";
 
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 interface Evento {
   eventosDB: {
+    id: number;
     mes: number;
     dia: number;
     title: string;
@@ -21,13 +25,51 @@ interface Evento {
   }[];
 }
 
-function Calendar({ eventosDB }: Evento) {
-  console.log(eventosDB);
+interface UserData {
+  userData: {
+    email: string | undefined;
+    areaAtuacao: string | null | undefined;
+    admin: boolean | null | undefined;
+    nome: string | undefined;
+    id: number | undefined;
+    eventosCadastrados: {
+      id: number;
+    }[];
+  };
+}
+
+interface Props extends Evento, UserData {}
+
+function Calendar({ eventosDB, userData }: Props) {
   const [mesAtual, setMesAtual] = useState(new Date().getMonth());
   const [atualYear, setAtualYear] = useState(new Date().getFullYear());
   const quantidadeDiasMes = new Date(atualYear, mesAtual + 1, 0).getDate();
   const [openModalActive, setOpenModalActive] = useState(false);
   const titleMonth = dicionarioMeses[mesAtual];
+
+  const notify = () =>
+    toast.success("Cadastrado com sucesso!", {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+    });
+
+  const notifyError = (message: string) =>
+    toast.error(message, {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+    });
 
   function nextMonth() {
     if (mesAtual === 11) {
@@ -39,17 +81,16 @@ function Calendar({ eventosDB }: Evento) {
   }
 
   function prevMonth() {
-    if (mesAtual === new Date().getMonth()) {
-      setMesAtual(new Date().getMonth());
+    if (mesAtual === 0) {
+      setMesAtual(11);
+      setAtualYear((prevState) => prevState - 1);
     } else {
       setMesAtual((prevState) => prevState - 1);
     }
   }
 
-  // Primeiro dia da semana do mês atual (0: domingo, 1: segunda-feira, etc.)
   const primeiroDiaSemana = new Date(atualYear, mesAtual, 1).getDay();
 
-  // Dias da semana
   const diasSemana = [
     "Domingo",
     "Segunda",
@@ -60,14 +101,11 @@ function Calendar({ eventosDB }: Evento) {
     "Sábado",
   ];
 
-  // Quantidade de dias no mês anterior
   const quantidadeDiasMesAnterior = new Date(atualYear, mesAtual, 0).getDate();
 
-  // Criar o calendário
   const calendario = [];
   let diaAtual = 1;
 
-  // Preencher o calendário com dias do mês anterior
   for (let i = primeiroDiaSemana; i > 0; i--) {
     calendario.push({
       dia: quantidadeDiasMesAnterior - i + 1,
@@ -75,7 +113,6 @@ function Calendar({ eventosDB }: Evento) {
     });
   }
 
-  // Preencher o calendário com dias do mês atual
   while (diaAtual <= quantidadeDiasMes) {
     calendario.push({
       dia: diaAtual,
@@ -84,7 +121,6 @@ function Calendar({ eventosDB }: Evento) {
     diaAtual++;
   }
 
-  // Preencher o calendário com dias do próximo mês
   let diaProximoMes = 1;
   while (calendario.length % 7 !== 0) {
     calendario.push({
@@ -94,7 +130,6 @@ function Calendar({ eventosDB }: Evento) {
     diaProximoMes++;
   }
 
-  // Criar um mapa de eventos para acesso rápido
   const mapaEventos: { [key: string]: any[] } = {};
   eventosDB.forEach((evento) => {
     const key = `${evento.mes}-${evento.dia}`;
@@ -104,7 +139,6 @@ function Calendar({ eventosDB }: Evento) {
     mapaEventos[key].push(evento);
   });
 
-  // Função para encontrar eventos em um dia específico
   const encontrarEventos = (dia: number, mes: number): any[] => {
     const key = `${mes}-${dia}`;
     return mapaEventos[key] || [];
@@ -119,6 +153,7 @@ function Calendar({ eventosDB }: Evento) {
     local: "",
     mes: 0,
     title: "",
+    id: 0,
   });
 
   function openModal(evento: any) {
@@ -130,8 +165,31 @@ function Calendar({ eventosDB }: Evento) {
     setOpenModalActive(false);
   }
 
+  const [userDataElement, setUserDataElement] = useState(userData);
+
+  const updateUserData = (eventoId: number) => {
+    setUserDataElement((prevUserData) => ({
+      ...prevUserData,
+      eventosCadastrados: [
+        ...prevUserData.eventosCadastrados,
+        { id: eventoId },
+      ],
+    }));
+  };
+
   return (
     <section>
+      <Modal
+        closeModal={closeModal}
+        onModal={openModalActive}
+        evento={eventoDetails}
+        userData={userDataElement}
+        toastError={notifyError}
+        toastSuccess={notify}
+        updateUserData={updateUserData}
+      />
+
+      <ToastContainer />
       <div className="flex justify-between items-center p-5">
         <div className="flex items-center gap-5">
           <h2 className="text-3xl text-[#333333] font-medium">
@@ -162,11 +220,6 @@ function Calendar({ eventosDB }: Evento) {
       </div>
 
       <div className="p-5">
-        <Modal
-          closeModal={closeModal}
-          onModal={openModalActive}
-          evento={eventoDetails}
-        />
         <div className="flex">
           {diasSemana.map((dia, index) => (
             <div

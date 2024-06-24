@@ -8,7 +8,9 @@
   box-sizing: border-box;
 }
 .float-label-input:focus-within label,
-.float-label-input input:not(:placeholder-shown) + label {
+.float-label-input input:not(:placeholder-shown) + label,
+.float-label-input select:not([value=""]) + label,
+.float-label-input textarea:not([value=""]) + label {
   transform: translateY(-1.5rem) scale(0.75);
   background-color: white;
 }

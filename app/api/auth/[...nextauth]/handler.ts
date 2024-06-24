@@ -2,8 +2,9 @@ import NextAuth from "next-auth/next";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { prisma } from "@/lib/prisma";
 import { compare } from "bcrypt";
+import { NextAuthOptions } from "next-auth";
 
-export const handler = NextAuth({
+export const authOptions: NextAuthOptions = {
   session: {
     strategy: "jwt",
   },
@@ -30,22 +31,22 @@ export const handler = NextAuth({
         });
 
         if (!voluntario) return null;
-
-        const passwordMatch = await compare(
-          credentials.password,
-          voluntario.senha
-        );
-        console.log(passwordMatch);
-
-        if (passwordMatch) {
-          return {
-            id: voluntario.id.toString(), // Assuming id is a string in voluntario type
-            email: voluntario.email,
-          };
+        if (credentials?.password && voluntario.senha) {
+          const passwordMatch = await compare(
+            credentials?.password,
+            voluntario.senha
+          );
+          if (passwordMatch) {
+            return {
+              id: voluntario.id.toString(), // Assuming id is a string in voluntario type
+              email: voluntario.email,
+            };
+          }
+          return null;
         }
 
         return null;
       },
     }),
   ],
-});
+};

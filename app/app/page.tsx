@@ -1,21 +1,25 @@
 import Calendar from "@/components/calendar";
 import Navbar from "@/components/navbar";
+import { verifyLogin } from "@/hooks/verifyLogin";
 import { prisma } from "@/lib/prisma";
 import React from "react";
 
 interface Evento {
   id: number;
   nomeEvento: string;
-  dataEvento: string;
-  horaInicio: string;
-  horaFim: string;
-  categoriaEvento: string;
-  localEvento: string;
-  descricaoEvento: string;
+  dataEvento: string | null;
+  horaInicio: string | null;
+  horaFim: string | null;
+  categoriaEvento: string | null;
+  localEvento: string | null;
+  descricaoEvento: string | null;
 }
 
 function formatarEvento(evento: Evento): any {
+  if (!evento.dataEvento) return;
+
   const dataObj = new Date(evento.dataEvento);
+
   const diasSemana = [
     "Domingo",
     "Segunda-Feira",
@@ -26,8 +30,8 @@ function formatarEvento(evento: Evento): any {
     "Sábado",
   ];
   const nomeDia = diasSemana[dataObj.getDay()];
-  const dia = dataObj.getDate();
-  const mes = dataObj.getMonth() + 1; // Meses são de 0 a 11, então adicionamos 1
+  const dia = dataObj.getDate() + 1;
+  const mes = dataObj.getMonth() + 1;
 
   const formatted_data = `${nomeDia} - ${dia.toString().padStart(2, "0")}/${mes
     .toString()
@@ -36,6 +40,7 @@ function formatarEvento(evento: Evento): any {
   const hora = `${evento.horaInicio} - ${evento.horaFim}`;
 
   return {
+    idEvento: evento.id,
     mes: mes,
     dia: dia,
     title: evento.nomeEvento,
@@ -53,23 +58,23 @@ async function getEventos(): Promise<any[]> {
   if (!eventos) {
     throw new Error("Failed to fetch Eventos");
   }
-
-  // Mapeamos cada evento para o formato desejado
   const eventosFormatados = eventos.map((evento) => formatarEvento(evento));
-
   return eventosFormatados;
 }
 
 async function App() {
   const eventos = await getEventos();
+  const userLogin = await verifyLogin();
 
   return (
     <main className="flex min-h-screen">
       <Navbar />
       <div className="flex-1">
-        <h1 className="text-xl text-[#333] p-5 bg-[#F2F2F2] w-full">Início</h1>
+        <h1 className="text-xl text-[#333] p-5 bg-[#F2F2F2] w-full">
+          Agenda de Voluntariado
+        </h1>
 
-        <Calendar eventosDB={eventos} />
+        <Calendar eventosDB={eventos} userData={userLogin} />
       </div>
     </main>
   );
