@@ -28,7 +28,6 @@ async function MeusVoluntariados() {
   const { id } = await verifyLogin();
   const data = await getEventosInscrito(Number(id));
 
-  console.log(data);
   return (
     <main className="flex min-h-screen">
       <Navbar />
