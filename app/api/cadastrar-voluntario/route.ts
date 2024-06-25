@@ -10,8 +10,9 @@ interface Voluntario {
   telefone: string;
   email: string;
   confirmarEmail: string;
-  areaAtuacao: string;
   senha: string;
+  areaAtuacao: { nome: string }[];
+  admin_validade: string;
 }
 
 export async function POST(request: Request) {
@@ -25,7 +26,7 @@ export async function POST(request: Request) {
       !data.telefone ||
       !data.email ||
       !data.confirmarEmail ||
-      !data.areaAtuacao ||
+      !data.areaAtuacao.length ||
       !data.senha
     ) {
       return NextResponse.json(
@@ -42,33 +43,53 @@ export async function POST(request: Request) {
       );
     }
 
+    // Hash da senha
     const hashedPassword = await hash(data.senha, 10);
+
+    // Verificar se o e-mail já está cadastrado
+    const voluntarioExistente = await prisma.voluntario.findUnique({
+      where: {
+        email: data.email,
+      },
+    });
+
+    if (voluntarioExistente) {
+      return NextResponse.json(
+        { error: "E-mail já cadastrado" },
+        { status: 400 }
+      );
+    }
 
     await prisma.voluntario.create({
       data: {
-        areaAtuacao: data.areaAtuacao,
-        email: data.email,
         nome: data.nome,
-        senha: hashedPassword,
-        telefone: data.telefone,
         dataNascimento: data.dataNascimento,
-        admin: false,
+        telefone: data.telefone,
+        email: data.email,
+        senha: hashedPassword,
+        areaAtuacao: JSON.stringify(
+          data.areaAtuacao.map((area) => ({ nome: area.nome }))
+        ),
+        admin: data.admin_validade !== "" ? true : false,
+        empresa: data.areaAtuacao.filter((el) => el.nome == "Empresa")
+          ? true
+          : false,
       },
     });
 
     return NextResponse.json({ message: "Cadastrado com sucesso" });
-  } catch (error) {
+  } catch (error: any) {
+    console.error("Erro ao cadastrar voluntário:", error);
+
     if (error instanceof Prisma.PrismaClientKnownRequestError) {
-      // Tratar erros conhecidos do Prisma
-      if (error.code === "P2002") {
-        return NextResponse.json(
-          { error: "E-mail já cadastrado" },
-          { status: 400 }
-        );
-      }
+      return NextResponse.json(
+        { error: "Erro de banco de dados ao cadastrar voluntário" },
+        { status: 500 }
+      );
     }
+
     return NextResponse.json(
-      { error: "Erro ao cadastrar voluntário" },
+      { error: "Erro desconhecido ao cadastrar voluntário" },
       { status: 500 }
     );
   } finally {

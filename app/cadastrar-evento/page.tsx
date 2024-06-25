@@ -8,7 +8,7 @@ import { verifyLogin } from "@/hooks/verifyLogin";
 import CadastrarEventoForm from "@/components/cadastrarEventoForm";
 
 async function CadastrarEvento() {
-  const { admin } = await verifyLogin();
+  const { admin, id } = await verifyLogin();
 
   if (!admin) redirect("/app");
 
@@ -16,7 +16,7 @@ async function CadastrarEvento() {
     <main className="flex min-h-screen">
       <ToastContainer />
       <Navbar />
-      <CadastrarEventoForm />
+      <CadastrarEventoForm criadorId={Number(id)} />
     </main>
   );
 }

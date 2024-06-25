@@ -1,6 +1,5 @@
 "use client";
 import React, { useState, ChangeEvent, FormEvent } from "react";
-
 import useLoading from "@/hooks/Loading";
 import { categorias } from "@/utils/categoriasVoluntario";
 import Image from "next/image";
@@ -13,10 +12,25 @@ interface Voluntario {
   telefone: string;
   email: string;
   confirmarEmail: string;
+  areaAtuacao: { nome: string }[];
+  senha: string;
+  confirmarSenha: string;
+  admin_validade?: string;
+}
+
+interface VoluntarioValidate {
+  nome: string;
+  dataNascimento: string;
+  telefone: string;
+  email: string;
+  confirmarEmail: string;
   areaAtuacao: string;
   senha: string;
   confirmarSenha: string;
+  admin_validade?: string;
 }
+
+type VoluntarioKey = keyof Voluntario;
 
 function CadastrarVoluntarioForm() {
   const [voluntario, setVoluntario] = useState<Voluntario>({
@@ -25,12 +39,13 @@ function CadastrarVoluntarioForm() {
     telefone: "",
     email: "",
     confirmarEmail: "",
-    areaAtuacao: "",
+    areaAtuacao: [],
     senha: "",
     confirmarSenha: "",
+    admin_validade: "",
   });
 
-  const [erros, setErros] = useState<Partial<Voluntario>>({});
+  const [erros, setErros] = useState<Partial<VoluntarioValidate>>({});
   const [loading, startLoading, stopLoading] = useLoading();
 
   const notify = () =>
@@ -67,18 +82,54 @@ function CadastrarVoluntarioForm() {
     });
   };
 
+  const handleCheckboxChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const { name, checked } = event.target;
+    let updatedAreas = [...voluntario.areaAtuacao];
+    if (checked) {
+      updatedAreas.push({ nome: name });
+    } else {
+      updatedAreas = updatedAreas.filter((area) => area.nome !== name);
+    }
+    setVoluntario({
+      ...voluntario,
+      areaAtuacao: updatedAreas,
+    });
+  };
+
+  const handleAdminChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const { checked } = event.target;
+    setVoluntario({
+      ...voluntario,
+      admin_validade: checked ? new Date().toISOString() : "",
+    });
+  };
+
+  const isString = (value: any): value is string => {
+    return typeof value === "string";
+  };
+
+  const isArray = (value: any): value is any[] => {
+    return Array.isArray(value);
+  };
+
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     startLoading();
 
-    // Verificar se todos os campos estão preenchidos
-    const novosErros: Partial<Voluntario> = {};
+    // Verificar se todos os campos estão preenchidos, exceto admin_validade
+    const novosErros: Partial<VoluntarioValidate> = {};
     let formularioValido = true;
 
-    Object.keys(voluntario).forEach((campo) => {
-      if (!voluntario[campo as keyof Voluntario]) {
-        novosErros[campo as keyof Voluntario] = "Este campo é obrigatório";
-        formularioValido = false;
+    (Object.keys(voluntario) as VoluntarioKey[]).forEach((campo) => {
+      const valor = voluntario[campo];
+      if (campo !== "admin_validade") {
+        if (isString(valor) && !valor.trim()) {
+          novosErros[campo] = "Este campo é obrigatório";
+          formularioValido = false;
+        } else if (isArray(valor) && valor.length === 0) {
+          novosErros[campo] = "Este campo é obrigatório";
+          formularioValido = false;
+        }
       }
     });
 
@@ -115,15 +166,18 @@ function CadastrarVoluntarioForm() {
         return;
       }
 
+      console.log(voluntario);
+
       setVoluntario({
         nome: "",
         dataNascimento: "",
         telefone: "",
         email: "",
         confirmarEmail: "",
-        areaAtuacao: "",
+        areaAtuacao: [],
         senha: "",
         confirmarSenha: "",
+        admin_validade: "",
       });
 
       // Limpar os erros
@@ -262,34 +316,51 @@ function CadastrarVoluntarioForm() {
         </div>
 
         {/* Área de Atuação */}
-        <div className="relative float-label-input mt-5 mb-2">
-          <select
-            id="areaAtuacao"
-            name="areaAtuacao"
-            value={voluntario.areaAtuacao}
-            onChange={handleInputChange}
-            className={`w-full bg-white focus:outline-none focus:shadow-outline border border-gray-300 rounded-md py-3 px-3 block appearance-none leading-normal focus:border-blue-400 ${
-              erros.areaAtuacao ? "border-red-500" : ""
-            }`}
-          >
-            <option value="" disabled hidden></option>
-            {categorias.map((el) => (
-              <option key={el} value={el}>
-                {el}
-              </option>
-            ))}
-          </select>
-          <label
-            htmlFor="areaAtuacao"
-            className={`absolute top-3 left-0 text-gray-400 pointer-events-none transition duration-200 ease-in-out bg-white mx-2 text-grey-darker ${
-              voluntario.areaAtuacao ? "transform -translate-y-4 scale-75" : ""
-            }`}
-          >
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-gray-700 mb-2">
             Área de Atuação
           </label>
+          <div className="flex gap-5">
+            {categorias.map((categoria) => (
+              <div
+                key={categoria.nome}
+                className="flex items-center cursor-pointer"
+              >
+                <input
+                  type="checkbox"
+                  id={categoria.nome}
+                  name={categoria.nome}
+                  checked={voluntario.areaAtuacao.some(
+                    (area) => area.nome === categoria.nome
+                  )}
+                  onChange={handleCheckboxChange}
+                  className="mr-2"
+                />
+                <label htmlFor={categoria.nome}>{categoria.nome}</label>
+              </div>
+            ))}
+          </div>
           {erros.areaAtuacao && (
             <p className="text-red-500 text-xs mt-1">{erros.areaAtuacao}</p>
           )}
+        </div>
+
+        {/* Configurar ADM */}
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+            Perfil Administrador
+          </label>
+          <div className="flex gap-5">
+            <input
+              type="checkbox"
+              id="admin_validade"
+              name="admin_validade"
+              checked={Boolean(voluntario.admin_validade)}
+              onChange={handleAdminChange}
+              className="mr-2"
+            />
+            <label htmlFor="admin_validade"> Perfil Administrador</label>
+          </div>
         </div>
 
         {/* Senha */}
@@ -340,7 +411,7 @@ function CadastrarVoluntarioForm() {
 
         <button
           type="submit"
-          className="  bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded mt-3"
+          className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded mt-3"
           disabled={loading}
         >
           {loading ? (

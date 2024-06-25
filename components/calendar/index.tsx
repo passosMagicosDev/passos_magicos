@@ -22,6 +22,7 @@ interface Evento {
     local: string;
     desc: string;
     categoria: string;
+    quantidadeDePessoas: bigint;
   }[];
 }
 
@@ -34,6 +35,10 @@ interface UserData {
     id: number | undefined;
     eventosCadastrados: {
       id: number;
+    }[];
+    eventosInscritos: {
+      id: number;
+      eventoId: number;
     }[];
   };
 }
@@ -167,13 +172,10 @@ function Calendar({ eventosDB, userData }: Props) {
 
   const [userDataElement, setUserDataElement] = useState(userData);
 
-  const updateUserData = (eventoId: number) => {
+  const updateUserData = (newEvento: { id: number; eventoId: number }) => {
     setUserDataElement((prevUserData) => ({
       ...prevUserData,
-      eventosCadastrados: [
-        ...prevUserData.eventosCadastrados,
-        { id: eventoId },
-      ],
+      eventosInscritos: [...prevUserData.eventosInscritos, newEvento],
     }));
   };
 

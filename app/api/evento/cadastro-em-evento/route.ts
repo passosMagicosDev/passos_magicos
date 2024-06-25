@@ -7,7 +7,6 @@ export async function POST(request: Request) {
   try {
     const { idEvento, idVoluntario } = await request.json();
 
-    // Verificar se idEvento e idVoluntario são fornecidos
     if (!idEvento || !idVoluntario) {
       return NextResponse.json(
         { error: "idEvento e idVoluntario são obrigatórios." },
@@ -15,7 +14,6 @@ export async function POST(request: Request) {
       );
     }
 
-    // Verificar se o evento existe
     const evento = await prisma.evento.findUnique({
       where: { id: idEvento },
     });
@@ -27,7 +25,6 @@ export async function POST(request: Request) {
       );
     }
 
-    // Verificar se o voluntário existe
     const voluntario = await prisma.voluntario.findUnique({
       where: { id: idVoluntario },
     });
@@ -39,28 +36,27 @@ export async function POST(request: Request) {
       );
     }
 
-    const updateEvento = await prisma.evento.update({
-      where: {
-        id: idEvento,
-      },
+    const inscricao = await prisma.eventoToVoluntario.create({
       data: {
-        inscritos: {
-          connect: { id: idVoluntario },
-        },
+        eventoId: idEvento,
+        voluntarioId: idVoluntario,
+        email: voluntario.email,
+        nome: voluntario.nome,
+        telefone: voluntario.telefone,
       },
     });
 
     return NextResponse.json(
       {
         message: "Voluntário adicionado ao evento com sucesso.",
-        updateEvento,
+        inscricao,
       },
       { status: 200 }
     );
   } catch (error) {
-    console.error("Erro ao consultar eventos e voluntários:", error);
+    console.error("Erro ao adicionar voluntário ao evento:", error);
     return NextResponse.json(
-      { error: "Erro ao consultar eventos e voluntários." },
+      { error: "Erro ao adicionar voluntário ao evento." },
       { status: 500 }
     );
   } finally {

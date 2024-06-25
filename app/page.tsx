@@ -42,12 +42,22 @@ export default function App() {
               Se você quer fazer parte do nosso time, clique no botão abaixo!
             </p>
 
-            <Link
-              href="/login"
-              className="block w-max py-3 px-10 rounded bg-transparent text-base font-medium text-white border"
-            >
-              Quero ser voluntário
-            </Link>
+            <div className="flex gap-5">
+              <Link
+                href="/login"
+                className="block w-max py-3 px-10 rounded bg-transparent text-base font-medium text-white border"
+              >
+                Quero ser voluntário
+              </Link>
+
+              <Link
+                target="blank"
+                href="https://passosmagicos.org.br/como-apoiar/"
+                className="block w-max py-3 px-10 rounded bg-transparent text-base font-medium text-white border"
+              >
+                Quero doar
+              </Link>
+            </div>
           </div>
         </div>
       </div>

@@ -13,6 +13,7 @@ interface Evento {
   categoriaEvento: string | null;
   localEvento: string | null;
   descricaoEvento: string | null;
+  quantidadeDePessoas: number;
 }
 
 function formatarEvento(evento: Evento): any {
@@ -49,6 +50,7 @@ function formatarEvento(evento: Evento): any {
     local: evento.localEvento,
     desc: evento.descricaoEvento,
     categoria: evento.categoriaEvento,
+    quantidadeDePessoas: evento.quantidadeDePessoas,
   };
 }
 

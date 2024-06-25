@@ -8,37 +8,46 @@ datasource db {
 }
 
 model Evento {
-  id                 Int                  @id @default(autoincrement())
-  nomeEvento         String
-  dataEvento         String?
-  horaInicio         String?
-  horaFim            String?
-  categoriaEvento    String?
-  localEvento        String?
-  descricaoEvento    String?              @db.Text
-  inscritos          Voluntario[]         @relation("EventoToVoluntario")
-  EventoToVoluntario EventoToVoluntario[]
+  id                    Int                  @id @default(autoincrement())
+  nomeEvento            String
+  dataEvento            String?
+  horaInicio            String?
+  horaFim               String?
+  categoriaEvento       String?
+  localEvento           String?
+  areasAtuacao          String?
+  quantidadeDePessoas   Int
+  quantidadeVoluntarios Int
+  descricaoEvento       String?              @db.Text
+  criadorId             Int
+  criador               Voluntario           @relation(name: "EventosCriados", fields: [criadorId], references: [id])
+  inscritos             EventoToVoluntario[]
 }
 
 model Voluntario {
-  id                 Int                  @id @default(autoincrement())
-  nome               String
-  dataNascimento     String?
-  telefone           String?
-  email              String               @unique
-  areaAtuacao        String?
-  senha              String?
-  admin              Boolean?
-  eventos            Evento[]             @relation("EventoToVoluntario")
-  EventoToVoluntario EventoToVoluntario[]
+  id               Int                  @id @default(autoincrement())
+  nome             String
+  dataNascimento   String?
+  telefone         String?
+  email            String               @unique
+  areaAtuacao      String?
+  senha            String?
+  admin            Boolean?
+  empresa          Boolean
+  eventosCriados   Evento[]             @relation(name: "EventosCriados")
+  eventosInscritos EventoToVoluntario[]
 }
 
 model EventoToVoluntario {
-  id           Int @id @default(autoincrement())
+  id           Int     @id @default(autoincrement())
   eventoId     Int
   voluntarioId Int
+  nome         String
+  email        String  @unique
+  telefone     String?
 
-  // Defina as chaves estrangeiras e os relacionamentos
   evento     Evento     @relation(fields: [eventoId], references: [id])
   voluntario Voluntario @relation(fields: [voluntarioId], references: [id])
+
+  @@unique([eventoId, voluntarioId])
 }

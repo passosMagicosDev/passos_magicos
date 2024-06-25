@@ -16,6 +16,7 @@ interface Evento {
   local: string;
   desc: string;
   categoria: string;
+  quantidadeDePessoas: bigint;
 }
 
 interface UserData {
@@ -27,6 +28,11 @@ interface UserData {
   eventosCadastrados: {
     id: number;
   }[];
+
+  eventosInscritos: {
+    id: number;
+    eventoId: number;
+  }[];
 }
 
 interface Props {
@@ -36,7 +42,7 @@ interface Props {
   toastSuccess: (message: string) => Id;
   toastError: (message: string) => Id;
   userData: UserData;
-  updateUserData: (eventoId: number) => void;
+  updateUserData: (newEvento: { id: number; eventoId: number }) => void;
 }
 
 function Modal({
@@ -48,10 +54,6 @@ function Modal({
   toastSuccess,
   updateUserData,
 }: Props) {
-  const verifyInscrito = userData.eventosCadastrados.some(
-    (el) => el.id === evento.idEvento
-  );
-
   return (
     <div
       className={`fixed left-0 top-0 bg-black/30 w-full h-screen z-10 flex items-center justify-center transition-all ${
@@ -68,9 +70,12 @@ function Modal({
           {evento.title}
         </h3>
 
-        <div className="pt-10 px-5 pb-8">
+        <div className="pt-5 px-5 pb-8">
           <p className="text-xl text-[#97A0B1]">{evento.formatted_data}</p>
-          <p className="text-xl text-[#97A0B1] mb-3">{evento.hora}</p>
+          <p className="text-xl text-[#97A0B1]">{evento.hora}</p>
+          <p className="text-xl text-[#97A0B1] mb-3">
+            Quantidade de pessoas: {Number(evento.quantidadeDePessoas)}
+          </p>
 
           <p className="flex text-[#F58334] max-w-[290px] items-start gap-1 mb-4">
             <Image src={Location} alt="" />
@@ -81,7 +86,6 @@ function Modal({
           <ButtonModal
             idEvento={evento.idEvento}
             idVoluntario={Number(userData.id)}
-            inscrito={verifyInscrito}
             toastError={toastError}
             toastSuccess={toastSuccess}
             updateUserData={updateUserData}

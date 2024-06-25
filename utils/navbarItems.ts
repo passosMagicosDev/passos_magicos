@@ -1,8 +1,8 @@
 import Calendar from "@/public/imgs/icons/calendar.svg";
 import QueroDoar from "@/public/imgs/icons/quero_doar.svg";
-import Faq from "@/public/imgs/icons/faq.svg";
 import MeuPerfil from "@/public/imgs/icons/meu_perfil.svg";
 import Voluntariados from "@/public/imgs/icons/voluntariado.svg";
+import MeusEventos from "@/public/imgs/icons/meus-eventos.svg";
 
 export const itemsNavBar = [
   {
@@ -42,5 +42,11 @@ export const itemsNavBarAdmin = [
     item: "Meus Voluntariados",
     active: false,
     url: "/meus-voluntariados",
+  },
+  {
+    img: MeusEventos,
+    item: "Meus Eventos",
+    active: false,
+    url: "/meus-eventos",
   },
 ];

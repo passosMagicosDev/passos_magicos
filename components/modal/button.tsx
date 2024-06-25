@@ -1,8 +1,9 @@
+"use client";
 import Image from "next/image";
-import React, { useState } from "react";
-import Check from "@/public/imgs/icons/check.svg";
+import React, { useEffect, useState } from "react";
 import Spinner from "@/public/imgs/icons/spinnerOrange.svg";
 import { Id } from "react-toastify";
+import { useRouter } from "next/navigation";
 
 interface UserData {
   email: string | undefined;
@@ -13,6 +14,11 @@ interface UserData {
   eventosCadastrados: {
     id: number;
   }[];
+
+  eventosInscritos: {
+    id: number;
+    eventoId: number;
+  }[];
 }
 
 type Props = {
@@ -20,8 +26,7 @@ type Props = {
   idVoluntario: number;
   toastSuccess: (message: string) => Id;
   toastError: (message: string) => Id;
-  inscrito: boolean;
-  updateUserData: (eventoId: number) => void;
+  updateUserData: (newEvento: { id: number; eventoId: number }) => void;
   userData: UserData;
 };
 
@@ -30,16 +35,15 @@ function ButtonModal({
   idVoluntario,
   toastError,
   toastSuccess,
-  inscrito,
   updateUserData,
   userData,
 }: Props) {
+  const router = useRouter();
   const [buttonState, setButtonState] = useState({
     loading: false,
   });
-
-  const verifyInscrito = userData.eventosCadastrados.some(
-    (el) => el.id === idEvento
+  const verifyInscrito = userData.eventosInscritos.some(
+    (el) => el.eventoId === idEvento
   );
 
   async function handleSubmit() {
@@ -68,7 +72,7 @@ function ButtonModal({
     }
 
     try {
-      const response = await fetch("/api/cadastro-em-evento", {
+      const response = await fetch("/api/evento/cadastro-em-evento", {
         method: "POST",
         body: JSON.stringify(ids),
         headers: {
@@ -81,7 +85,8 @@ function ButtonModal({
       if (response.ok) {
         toastSuccess(result.message);
         setButtonState({ loading: false });
-        updateUserData(idEvento);
+        updateUserData({ eventoId: idEvento, id: Number(userData.id) });
+        router.refresh();
       } else {
         toastError(result.error);
         setButtonState({ loading: false });

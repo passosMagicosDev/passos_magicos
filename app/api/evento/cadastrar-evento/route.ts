@@ -11,6 +11,10 @@ interface Evento {
   categoriaEvento: string;
   localEvento: string;
   descricaoEvento: string;
+  quantidadeDePessoas: number;
+  quantidadeVoluntarios: number;
+  criadorId: number;
+  areasAtuacao: string;
 }
 
 export async function POST(request: Request) {
@@ -24,7 +28,9 @@ export async function POST(request: Request) {
     !data.horaFim ||
     !data.categoriaEvento ||
     !data.localEvento ||
-    !data.descricaoEvento
+    !data.descricaoEvento ||
+    !data.quantidadeDePessoas ||
+    !data.areasAtuacao
   ) {
     return NextResponse.json(
       { error: "Todos os campos são obrigatórios" },
@@ -41,11 +47,16 @@ export async function POST(request: Request) {
 
   try {
     await prisma.evento.create({
-      data: data,
+      data: {
+        ...data,
+        quantidadeVoluntarios: Number(data.quantidadeVoluntarios),
+        quantidadeDePessoas: Number(data.quantidadeDePessoas),
+      },
     });
 
     return NextResponse.json({ message: "Cadastrado com sucesso" });
   } catch (error) {
+    console.log(error);
     if (error instanceof Prisma.PrismaClientKnownRequestError) {
       return NextResponse.json(
         { error: "Erro de banco de dados" },

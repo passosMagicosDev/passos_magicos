@@ -18,7 +18,13 @@ export async function verifyLogin() {
   const eventosDoVoluntario = await prisma.voluntario.findUnique({
     where: { id: user?.id },
     select: {
-      eventos: {
+      eventosInscritos: {
+        select: {
+          id: true,
+          eventoId: true,
+        },
+      },
+      eventosCriados: {
         select: {
           id: true,
         },
@@ -32,6 +38,7 @@ export async function verifyLogin() {
     admin: user?.admin,
     nome: user?.nome,
     id: user?.id,
-    eventosCadastrados: eventosDoVoluntario!.eventos,
+    eventosCadastrados: eventosDoVoluntario!.eventosCriados,
+    eventosInscritos: eventosDoVoluntario!.eventosInscritos,
   };
 }
