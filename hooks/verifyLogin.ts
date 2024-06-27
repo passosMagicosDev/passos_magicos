@@ -1,7 +1,7 @@
 import { authOptions } from "@/app/api/auth/[...nextauth]/handler";
+import { prismaClient } from "@/prisma/prismaClient";
 import { getServerSession } from "next-auth/next";
 import { redirect } from "next/navigation";
-import { PrismaClient } from "@prisma/client";
 
 export async function verifyLogin() {
   console.log("ENTREI VERIFY");
@@ -9,14 +9,13 @@ export async function verifyLogin() {
   if (!loginUser) {
     redirect("/");
   }
-  const prisma = new PrismaClient();
-  const user = await prisma.voluntario.findUnique({
+  const user = await prismaClient.voluntario.findUnique({
     where: {
       email: String(loginUser.user?.email),
     },
   });
 
-  const eventosDoVoluntario = await prisma.voluntario.findUnique({
+  const eventosDoVoluntario = await prismaClient.voluntario.findUnique({
     where: { id: user?.id },
     select: {
       eventosInscritos: {

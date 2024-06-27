@@ -1,14 +1,12 @@
 import Navbar from "@/components/navbar";
 import { verifyLogin } from "@/hooks/verifyLogin";
 import React from "react";
-import { PrismaClient } from "@prisma/client";
 import CardsVoluntariados from "@/components/meus-voluntariados";
-
-const prisma = new PrismaClient();
+import { prismaClient } from "@/prisma/prismaClient";
 
 async function getEventosInscrito(voluntarioId: number) {
   try {
-    const eventosInscritos = await prisma.eventoToVoluntario.findMany({
+    const eventosInscritos = await prismaClient.eventoToVoluntario.findMany({
       where: {
         voluntarioId: voluntarioId,
       },

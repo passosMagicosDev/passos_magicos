@@ -1,7 +1,5 @@
-import { PrismaClient } from "@prisma/client";
+import { prismaClient } from "@/prisma/prismaClient";
 import { NextResponse } from "next/server";
-
-const prisma = new PrismaClient();
 
 export async function POST(request: Request) {
   try {
@@ -14,7 +12,7 @@ export async function POST(request: Request) {
       );
     }
 
-    const evento = await prisma.evento.findUnique({
+    const evento = await prismaClient.evento.findUnique({
       where: { id: idEvento },
     });
 
@@ -25,7 +23,7 @@ export async function POST(request: Request) {
       );
     }
 
-    const voluntario = await prisma.voluntario.findUnique({
+    const voluntario = await prismaClient.voluntario.findUnique({
       where: { id: idVoluntario },
     });
 
@@ -36,7 +34,7 @@ export async function POST(request: Request) {
       );
     }
 
-    const inscricao = await prisma.eventoToVoluntario.create({
+    const inscricao = await prismaClient.eventoToVoluntario.create({
       data: {
         eventoId: idEvento,
         voluntarioId: idVoluntario,
@@ -60,6 +58,6 @@ export async function POST(request: Request) {
       { status: 500 }
     );
   } finally {
-    await prisma.$disconnect();
+    await prismaClient.$disconnect();
   }
 }

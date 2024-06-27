@@ -4,13 +4,11 @@ import React from "react";
 import { redirect } from "next/navigation";
 
 import { verifyLogin } from "@/hooks/verifyLogin";
-import { PrismaClient } from "@prisma/client";
 import ControlerEventos from "@/components/eventosCadastrados/controlerEventos";
-
-const prisma = new PrismaClient();
+import { prismaClient } from "@/prisma/prismaClient";
 
 async function getEventosCriadosPeloVoluntario(voluntarioId: number) {
-  const eventos = await prisma.evento.findMany({
+  const eventos = await prismaClient.evento.findMany({
     where: {
       criadorId: voluntarioId,
     },
