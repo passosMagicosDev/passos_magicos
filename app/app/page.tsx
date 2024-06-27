@@ -30,8 +30,12 @@ function formatarEvento(evento: Evento): any {
     "Sexta-Feira",
     "Sábado",
   ];
+
   const nomeDia = diasSemana[dataObj.getDay()];
   const dia = dataObj.getDate();
+  console.log("dia", dia);
+  console.log("dataOBJ", dataObj);
+
   const mes = dataObj.getMonth() + 1;
 
   const formatted_data = `${nomeDia} - ${dia.toString().padStart(2, "0")}/${mes
