@@ -19,7 +19,13 @@ interface Evento {
 function formatarEvento(evento: Evento): any {
   if (!evento.dataEvento) return;
 
-  const dataObj = new Date(evento.dataEvento);
+  const dataObj = new Date(
+    Date.UTC(
+      new Date(evento.dataEvento).getUTCFullYear(),
+      new Date(evento.dataEvento).getUTCMonth(),
+      new Date(evento.dataEvento).getUTCDate()
+    )
+  );
 
   const diasSemana = [
     "Domingo",
@@ -31,12 +37,10 @@ function formatarEvento(evento: Evento): any {
     "Sábado",
   ];
 
-  const nomeDia = diasSemana[dataObj.getDay()];
-  const dia = dataObj.getDate();
-  console.log("dia", dia);
-  console.log("dataOBJ", dataObj);
+  const nomeDia = diasSemana[dataObj.getUTCDay()];
+  const dia = dataObj.getUTCDate();
 
-  const mes = dataObj.getMonth() + 1;
+  const mes = dataObj.getUTCMonth() + 1;
 
   const formatted_data = `${nomeDia} - ${dia.toString().padStart(2, "0")}/${mes
     .toString()

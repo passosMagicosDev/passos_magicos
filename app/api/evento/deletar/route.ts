@@ -1,7 +1,5 @@
-import { PrismaClient } from "@prisma/client";
+import { prismaClient } from "@/prisma/prismaClient";
 import { NextResponse } from "next/server";
-
-const prisma = new PrismaClient();
 
 export async function DELETE(request: Request) {
   const { id } = await request.json();
@@ -11,7 +9,7 @@ export async function DELETE(request: Request) {
   }
 
   try {
-    await prisma.evento.delete({
+    await prismaClient.evento.delete({
       where: {
         id: Number(id),
       },

@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
 import { PrismaClient, Prisma } from "@prisma/client";
-
-const prisma = new PrismaClient();
+import { prismaClient } from "@/prisma/prismaClient";
 
 interface Evento {
   nomeEvento: string;
@@ -46,7 +45,7 @@ export async function POST(request: Request) {
   }
 
   try {
-    await prisma.evento.create({
+    await prismaClient.evento.create({
       data: {
         ...data,
         quantidadeVoluntarios: Number(data.quantidadeVoluntarios),
