@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { PrismaClient } from "@prisma/client";
 
 export async function verifyLogin() {
+  console.log("ENTREI VERIFY");
   const loginUser = await getServerSession(authOptions);
   if (!loginUser) {
     redirect("/");

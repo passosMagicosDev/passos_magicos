@@ -1,8 +1,7 @@
 import Calendar from "@/components/calendar";
-import Navbar from "@/components/navbar";
-import { verifyLogin } from "@/hooks/verifyLogin";
 import { prisma } from "@/lib/prisma";
 import React from "react";
+import { UserData } from "./layout";
 
 interface Evento {
   id: number;
@@ -66,8 +65,6 @@ async function getEventos(): Promise<any[]> {
 
 async function App() {
   const eventos = await getEventos();
-  const userLogin = await verifyLogin();
-
   return (
     <section>
       <div className="flex-1">
@@ -75,7 +72,7 @@ async function App() {
           Agenda de Voluntariado
         </h1>
 
-        <Calendar eventosDB={eventos} userData={userLogin} />
+        {/* <Calendar eventosDB={eventos} userData={userData} /> */}
       </div>
     </section>
   );
