@@ -29,33 +29,30 @@ async function MeusVoluntariados() {
   const data = await getEventosInscrito(Number(id));
 
   return (
-    <main className="flex min-h-screen">
-      <Navbar />
-      <div className="flex-1">
-        <h1 className="text-xl text-[#333] p-5 bg-[#F2F2F2] w-full">
-          Meus Voluntariados
-        </h1>
-        <div className="p-5">
-          {data.length === 0 ? (
-            <p>Você não está inscrito em nenhum evento.</p>
-          ) : (
-            data.map((evento) => (
-              <React.Fragment key={evento.id}>
-                <CardsVoluntariados
-                  id={evento.id}
-                  nomeEvento={evento.nomeEvento}
-                  descricaoEvento={evento.descricaoEvento}
-                  dataEvento={evento.dataEvento}
-                  horaFim={evento.horaFim}
-                  horaInicio={evento.horaInicio}
-                  quantidadeDePessoas={evento.quantidadeDePessoas}
-                />
-              </React.Fragment>
-            ))
-          )}
-        </div>
+    <section className="flex-1">
+      <h1 className="text-xl text-[#333] p-5 bg-[#F2F2F2] w-full">
+        Meus Voluntariados
+      </h1>
+      <div className="p-5">
+        {data.length === 0 ? (
+          <p>Você não está inscrito em nenhum evento.</p>
+        ) : (
+          data.map((evento) => (
+            <React.Fragment key={evento.id}>
+              <CardsVoluntariados
+                id={evento.id}
+                nomeEvento={evento.nomeEvento}
+                descricaoEvento={evento.descricaoEvento}
+                dataEvento={evento.dataEvento}
+                horaFim={evento.horaFim}
+                horaInicio={evento.horaInicio}
+                quantidadeDePessoas={evento.quantidadeDePessoas}
+              />
+            </React.Fragment>
+          ))
+        )}
       </div>
-    </main>
+    </section>
   );
 }
 

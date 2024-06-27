@@ -13,11 +13,10 @@ async function CadastrarEvento() {
   if (!admin) redirect("/app");
 
   return (
-    <main className="flex min-h-screen">
+    <>
       <ToastContainer />
-      <Navbar />
       <CadastrarEventoForm criadorId={Number(id)} />
-    </main>
+    </>
   );
 }
 

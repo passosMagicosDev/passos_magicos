@@ -10,11 +10,10 @@ async function CadastroVoluntario() {
 
   if (!admin) redirect("/app");
   return (
-    <main className="flex min-h-screen">
-      <Navbar />
+    <>
       <ToastContainer />
       <CadastrarVoluntarioForm />
-    </main>
+    </>
   );
 }
 

@@ -27,17 +27,14 @@ async function CadastrarEvento() {
   if (!admin) redirect("/app");
   const data = await getEventosCriadosPeloVoluntario(Number(id));
   return (
-    <main className="flex min-h-screen">
-      <Navbar />
-      <div className="flex flex-col flex-1">
-        <div className="">
-          <h1 className="text-xl text-[#333] p-5 bg-[#F2F2F2] w-full">
-            Meus Eventos Cadastrados
-          </h1>
-        </div>
-        <ControlerEventos evento={data} />
+    <section className="flex flex-col flex-1">
+      <div className="">
+        <h1 className="text-xl text-[#333] p-5 bg-[#F2F2F2] w-full">
+          Meus Eventos Cadastrados
+        </h1>
       </div>
-    </main>
+      <ControlerEventos evento={data} />
+    </section>
   );
 }
 

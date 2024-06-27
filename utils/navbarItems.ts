@@ -15,7 +15,7 @@ export const itemsNavBar = [
     img: Voluntariados,
     item: "Meus Voluntariados",
     active: false,
-    url: "/meus-voluntariados",
+    url: "/app/meus-voluntariados",
   },
 ];
 export const itemsNavBarAdmin = [
@@ -29,24 +29,24 @@ export const itemsNavBarAdmin = [
     img: QueroDoar,
     item: "Cadastrar voluntário",
     active: false,
-    url: "/cadastrar-volutario",
+    url: "/app/cadastrar-volutario",
   },
   {
     img: MeuPerfil,
     item: "Cadastrar Evento",
     active: false,
-    url: "/cadastrar-evento",
+    url: "/app/cadastrar-evento",
   },
   {
     img: Voluntariados,
     item: "Meus Voluntariados",
     active: false,
-    url: "/meus-voluntariados",
+    url: "/app/meus-voluntariados",
   },
   {
     img: MeusEventos,
     item: "Meus Eventos",
     active: false,
-    url: "/meus-eventos",
+    url: "/app/meus-eventos",
   },
 ];

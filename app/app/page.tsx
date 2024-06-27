@@ -69,8 +69,7 @@ async function App() {
   const userLogin = await verifyLogin();
 
   return (
-    <main className="flex min-h-screen">
-      <Navbar />
+    <section>
       <div className="flex-1">
         <h1 className="text-xl text-[#333] p-5 bg-[#F2F2F2] w-full">
           Agenda de Voluntariado
@@ -78,7 +77,7 @@ async function App() {
 
         <Calendar eventosDB={eventos} userData={userLogin} />
       </div>
-    </main>
+    </section>
   );
 }
 
