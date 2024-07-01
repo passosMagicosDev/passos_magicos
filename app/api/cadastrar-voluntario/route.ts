@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { Prisma } from "@prisma/client";
 import { hash } from "bcrypt";
-import { prismaClient } from "@/prisma/prismaClient";
+import prisma from "@/lib/prisma";
 
 interface Voluntario {
   nome: string;
@@ -15,6 +15,7 @@ interface Voluntario {
 }
 
 export async function POST(request: Request) {
+  console.log("CADASTRAR EVENTO API");
   try {
     const data: Voluntario = await request.json();
 
@@ -46,7 +47,7 @@ export async function POST(request: Request) {
     const hashedPassword = await hash(data.senha, 10);
 
     // Verificar se o e-mail já está cadastrado
-    const voluntarioExistente = await prismaClient.voluntario.findUnique({
+    const voluntarioExistente = await prisma.voluntario.findUnique({
       where: {
         email: data.email,
       },
@@ -59,7 +60,7 @@ export async function POST(request: Request) {
       );
     }
 
-    await prismaClient.voluntario.create({
+    await prisma.voluntario.create({
       data: {
         nome: data.nome,
         dataNascimento: data.dataNascimento,
@@ -92,6 +93,6 @@ export async function POST(request: Request) {
       { status: 500 }
     );
   } finally {
-    await prismaClient.$disconnect();
+    await prisma.$disconnect();
   }
 }

@@ -43,7 +43,7 @@ model EventoToVoluntario {
   eventoId     Int
   voluntarioId Int
   nome         String
-  email        String  @unique
+  email        String
   telefone     String?
 
   evento     Evento     @relation(fields: [eventoId], references: [id])

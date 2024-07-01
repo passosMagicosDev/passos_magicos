@@ -1,12 +1,20 @@
 "use client";
 
-import React, { ChangeEvent, FormEvent, useState } from "react";
+import React, {
+  ChangeEvent,
+  FormEvent,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import useLoading from "@/hooks/Loading";
 import { categorias, categoriasEvento } from "@/utils/categoriasVoluntario"; // Importe corretamente as categorias necessárias
 import Image from "next/image";
 import Spinner from "@/public/imgs/icons/spinner.svg";
-import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
+import { useDataUser } from "@/context/UserDataContext";
+import { notifyError, notifySuccess } from "@/utils/notify";
+import { EventoDetalhado } from "@/types/types";
 
 interface Evento {
   nomeEvento: string;
@@ -18,8 +26,7 @@ interface Evento {
   descricaoEvento: string;
   quantidadeDePessoas: string;
   quantidadeVoluntarios: number;
-  criadorId: number;
-  areasAtuacao: { nome: string }[]; // Alteração para array de objetos com nome
+  areasAtuacao: { nome: string }[];
 }
 
 interface EventoValidate {
@@ -35,11 +42,9 @@ interface EventoValidate {
   areasAtuacao: string;
 }
 
-type Props = {
-  criadorId: number;
-};
+function CadastrarEventoForm() {
+  const { id } = useDataUser();
 
-function CadastrarEventoForm({ criadorId }: Props) {
   const router = useRouter();
   const [loading, startLoading, stopLoading] = useLoading();
   const [evento, setEvento] = useState<Evento>({
@@ -52,35 +57,10 @@ function CadastrarEventoForm({ criadorId }: Props) {
     descricaoEvento: "",
     quantidadeDePessoas: "",
     quantidadeVoluntarios: 0,
-    criadorId: criadorId,
-    areasAtuacao: [], // Inicializa como um array vazio de objetos
+    areasAtuacao: [],
   });
 
   const [erros, setErros] = useState<Partial<EventoValidate>>({});
-
-  const notifySuccess = () =>
-    toast.success("Cadastrado com sucesso!", {
-      position: "top-right",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "light",
-    });
-
-  const notifyError = (message: string) =>
-    toast.error(message, {
-      position: "top-right",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "light",
-    });
 
   const handleInputChange = (
     event: ChangeEvent<
@@ -142,6 +122,7 @@ function CadastrarEventoForm({ criadorId }: Props) {
     try {
       const eventoParaEnviar = {
         ...evento,
+        criadorId: id,
         areasAtuacao: JSON.stringify(
           evento.areasAtuacao.map((area) => ({ nome: area.nome }))
         ),
@@ -162,6 +143,20 @@ function CadastrarEventoForm({ criadorId }: Props) {
         return;
       }
 
+      if (data.evento) {
+        const cache = sessionStorage.getItem("eventosCache");
+        if (cache) {
+          const cacheArray: EventoDetalhado[] = JSON.parse(cache);
+          const updateCache = [...cacheArray, data.evento[0]];
+          sessionStorage.setItem("eventosCache", JSON.stringify(updateCache));
+        } else {
+          sessionStorage.setItem(
+            "eventosCache",
+            JSON.stringify([data.evento[0]])
+          );
+        }
+      }
+
       setEvento({
         nomeEvento: "",
         dataEvento: "",
@@ -172,11 +167,11 @@ function CadastrarEventoForm({ criadorId }: Props) {
         descricaoEvento: "",
         quantidadeDePessoas: "",
         quantidadeVoluntarios: 0,
-        criadorId: 0,
         areasAtuacao: [],
       });
 
       notifySuccess();
+
       router.refresh();
     } catch (error) {
       console.error("Erro ao cadastrar evento:", error);
