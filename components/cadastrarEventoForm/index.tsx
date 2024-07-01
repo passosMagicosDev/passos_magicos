@@ -318,7 +318,7 @@ function CadastrarEventoForm() {
           <label className="block text-sm font-medium text-gray-700">
             Áreas de Atuação do voluntário
           </label>
-          <div className="flex gap-4">
+          <div className="flex xl:gap-4 gap-2 flex-wrap">
             {categorias.map((area) => (
               <div key={area.nome} className="mt-1 cursor-pointer">
                 <input
@@ -444,7 +444,7 @@ function CadastrarEventoForm() {
         {/* Botão de Cadastro */}
         <button
           type="submit"
-          className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded mt-3"
+          className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded mt-3 w-full max-w-md xl:w-max"
           disabled={loading}
         >
           {loading ? (

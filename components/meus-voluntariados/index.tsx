@@ -22,13 +22,13 @@ function CardsVoluntariados({
   actions,
 }: Props) {
   return (
-    <div className="flex gap-2 relative flex-wrap">
+    <div className="flex xl:gap-2 relative flex-wrap">
       <ToastContainer />
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-        <div className="flex" key={id}>
-          <div className="max-w-[500px] w-full p-6 h-full bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+        <div className="flex flex-wrap gap-4" key={id}>
+          <div className="max-w-[500px] w-full p-6 xl:h-full bg-white border border-gray-200 rounded-lg shadow">
             <a href="#">
-              <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+              <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900">
                 {nomeEvento}
               </h5>
             </a>

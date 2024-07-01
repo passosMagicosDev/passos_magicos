@@ -318,7 +318,7 @@ function CadastrarVoluntarioForm() {
           <label className="block text-sm font-medium text-gray-700 mb-2">
             Área de Atuação
           </label>
-          <div className="flex gap-5">
+          <div className="flex gap-2 xl:gap-5 flex-wrap">
             {categorias.map((categoria) => (
               <div
                 key={categoria.nome}
@@ -344,7 +344,7 @@ function CadastrarVoluntarioForm() {
         </div>
 
         {/* Configurar ADM */}
-        <div className="mb-4">
+        <div className="mb-4 ">
           <label className="block text-sm font-medium text-gray-700 mb-2">
             Perfil Administrador
           </label>

@@ -8,10 +8,10 @@ import FormLogin from "@/components/formLogin";
 
 function Login() {
   return (
-    <main className="flex h-screen">
-      <div className="bg-blue-950 flex-1 flex flex-col w-[30%]">
+    <main className="flex h-screen justify-center">
+      <div className="bg-blue-950 flex-1 lg:flex flex-col w-[30%] hidden">
         <div className="relative w-full h-[70%]">
-          <h1 className="absolute text-5xl text-white font-bold max-w-[326px] left-10 bottom-10">
+          <h1 className="absolute text-4xl xl:text-5xl left-7 text-white font-bold max-w-[326px] xl:left-10 bottom-10">
             Já faz parte do nosso Voluntariado?
           </h1>
           <Image
@@ -41,7 +41,7 @@ function Login() {
         </div>
       </div>
 
-      <div className="flex items-center w-[70%]">
+      <div className="flex items-center px-6 md:w-[70%]">
         <div className="max-w-[526px] mx-auto flex flex-col">
           <h2 className="mb-14 text-4xl text-center text-text-dark">
             Acesse sua conta

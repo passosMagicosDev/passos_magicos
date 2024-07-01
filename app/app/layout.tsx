@@ -1,4 +1,5 @@
 import Navbar from "@/components/navbar";
+import NavbarMobile from "@/components/navbarMobile";
 import { DataUserProvider } from "@/context/UserDataContext";
 import { verifyLogin } from "@/hooks/verifyLogin";
 import { Roboto } from "next/font/google";
@@ -28,9 +29,16 @@ export default async function AppLayout({
   await verifyLogin();
 
   return (
-    <main className={`flex min-h-screen ${roboto.className}`}>
+    <main
+      className={`flex-col xl:flex-row flex min-h-screen ${roboto.className}`}
+    >
       <DataUserProvider>
-        <Navbar />
+        <div className="hidden xl:flex">
+          <Navbar />
+        </div>
+        <div className="block xl:hidden">
+          <NavbarMobile />
+        </div>
         <div className="flex flex-col flex-1">{children}</div>
       </DataUserProvider>
     </main>

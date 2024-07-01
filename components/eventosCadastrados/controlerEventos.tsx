@@ -67,7 +67,7 @@ function ControlerEventos() {
   return (
     <div className="flex gap-2 relative flex-wrap">
       <ToastContainer />
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 w-full">
         {eventos && eventos.length >= 1 ? (
           eventos.map((el) => {
             return (
