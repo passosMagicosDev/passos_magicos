@@ -166,8 +166,6 @@ function CadastrarVoluntarioForm() {
         return;
       }
 
-      console.log(voluntario);
-
       setVoluntario({
         nome: "",
         dataNascimento: "",

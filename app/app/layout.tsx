@@ -1,7 +1,7 @@
 import Navbar from "@/components/navbar";
+import { DataUserProvider } from "@/context/UserDataContext";
 import { verifyLogin } from "@/hooks/verifyLogin";
 import { Roboto } from "next/font/google";
-import { redirect } from "next/navigation";
 
 const roboto = Roboto({ weight: ["500", "400", "700"], subsets: ["latin"] });
 
@@ -25,16 +25,14 @@ export default async function AppLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const dataUser = await verifyLogin();
-
-  if (!dataUser.admin) {
-    redirect("/app");
-  }
+  await verifyLogin();
 
   return (
     <main className={`flex min-h-screen ${roboto.className}`}>
-      <Navbar />
-      <div className="flex flex-col flex-1">{children}</div>
+      <DataUserProvider>
+        <Navbar />
+        <div className="flex flex-col flex-1">{children}</div>
+      </DataUserProvider>
     </main>
   );
 }
