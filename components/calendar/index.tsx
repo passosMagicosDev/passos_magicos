@@ -112,7 +112,7 @@ export default function Calendar() {
     };
 
     fetchEventos();
-  }, []);
+  }, [userData]);
 
   if (loading) {
     return <LoadingCalendar />;

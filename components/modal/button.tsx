@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import Spinner from "@/public/imgs/icons/spinnerOrange.svg";
 import { Id } from "react-toastify";
 import { useRouter } from "next/navigation";
+import { useDataUser } from "@/context/UserDataContext";
 
 interface UserData {
   email: string | undefined;
@@ -32,19 +33,37 @@ type Props = {
 
 function ButtonModal({
   idEvento,
-  idVoluntario,
   toastError,
   toastSuccess,
   updateUserData,
   userData,
 }: Props) {
   const router = useRouter();
+  const { id } = useDataUser();
   const [buttonState, setButtonState] = useState({
     loading: false,
   });
-  const verifyInscrito = userData.eventosInscritos.some(
-    (el) => el.eventoId === idEvento
-  );
+  const [verifyInscrito, setVerifyInscrito] = useState<boolean>(false);
+  const [cacheSession, setCacheSession] = useState<any[]>([]);
+
+  useEffect(() => {
+    const cache = sessionStorage.getItem("eventosCache");
+    if (cache) {
+      const parsedCache = JSON.parse(cache);
+      setCacheSession(parsedCache);
+
+      const existEvent = parsedCache.find(
+        (el: any) => el.idEvento === idEvento
+      );
+      if (existEvent) {
+        const isUserInscrito = existEvent.inscritos.some(
+          (el: any) => el.voluntarioId === id
+        );
+
+        setVerifyInscrito(isUserInscrito);
+      }
+    }
+  }, [id, idEvento]);
 
   async function handleSubmit() {
     if (verifyInscrito) {
@@ -53,10 +72,9 @@ function ButtonModal({
     }
 
     setButtonState({ loading: true });
-
     const ids = {
       idEvento: idEvento,
-      idVoluntario: idVoluntario,
+      idVoluntario: id,
     };
 
     if (!ids.idEvento) {
@@ -81,11 +99,19 @@ function ButtonModal({
       });
 
       const result = await response.json();
-
       if (response.ok) {
+        const updatedCache = cacheSession.map((el: any) => {
+          if (el.idEvento === idEvento) {
+            el.inscritos.push(result.inscricao);
+          }
+          return el;
+        });
+
+        sessionStorage.setItem("eventosCache", JSON.stringify(updatedCache));
+        setVerifyInscrito(true);
         toastSuccess(result.message);
         setButtonState({ loading: false });
-        updateUserData({ eventoId: idEvento, id: Number(userData.id) });
+        updateUserData({ eventoId: idEvento, id: Number(id) });
         router.refresh();
       } else {
         toastError(result.error);
@@ -114,7 +140,7 @@ function ButtonModal({
               <Image src={Spinner} alt="Carregando" className="animate-spin" />
             </span>
           ) : (
-            <span>Increva-se para esta ação</span>
+            <span>Inscreva-se para esta ação</span>
           )}
         </button>
       )}

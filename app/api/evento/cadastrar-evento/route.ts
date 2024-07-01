@@ -79,7 +79,7 @@ export async function POST(request: Request) {
   }
 }
 
-export function formatarEvento(
+function formatarEvento(
   eventos: (Evento & { inscritos: Inscrito[] })[]
 ): FormattedEvento[] {
   return eventos

@@ -29,7 +29,7 @@ export async function GET() {
   }
 }
 
-export function formatarEvento(evento: EventoPrisma): FormattedEvento | null {
+function formatarEvento(evento: EventoPrisma): FormattedEvento | null {
   if (!evento.dataEvento) return null;
 
   const dataObj = new Date(

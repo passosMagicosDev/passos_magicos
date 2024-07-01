@@ -2,6 +2,8 @@ import prisma from "@/lib/prisma";
 import { NextResponse } from "next/server";
 
 export async function POST(request: Request) {
+  console.log("CADASTRO EM EVENTO");
+
   try {
     const { idEvento, idVoluntario } = await request.json();
 

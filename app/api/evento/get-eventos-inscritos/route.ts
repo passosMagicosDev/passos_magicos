@@ -2,6 +2,8 @@ import prisma from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(request: NextRequest) {
+  console.log("GET EVENTOS INSCRITOS");
+
   const idVoluntario = request.nextUrl.searchParams.get("idVoluntario");
 
   if (!idVoluntario) {

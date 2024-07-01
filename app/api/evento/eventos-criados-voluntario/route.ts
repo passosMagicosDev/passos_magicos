@@ -3,6 +3,8 @@ import { EventoCadastrado } from "@/types/types";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(request: NextRequest) {
+  console.log("EVENTOS CRIADOS VOLUNTARIOS");
+
   const id = request.nextUrl.searchParams.get("id");
 
   try {
@@ -37,7 +39,7 @@ export async function GET(request: NextRequest) {
   }
 }
 
-export function formatarEvento(eventos: Evento[]): FormattedEvento[] {
+function formatarEvento(eventos: Evento[]): FormattedEvento[] {
   return eventos
     .map((evento) => {
       if (!evento.dataEvento) return null;

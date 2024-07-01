@@ -15,6 +15,7 @@ interface Voluntario {
 }
 
 export async function POST(request: Request) {
+  console.log("CADASTRAR EVENTO API");
   try {
     const data: Voluntario = await request.json();
 

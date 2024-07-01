@@ -61,6 +61,7 @@ function FormLogin() {
       }
 
       router.push("/app");
+      sessionStorage.setItem("email_user", email);
     } catch (error: any) {
       setErrors({ general: error.message });
     } finally {

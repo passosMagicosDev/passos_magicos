@@ -14,6 +14,8 @@ function Navbar() {
   const formatedName = `${nome?.split(" ")[0]} ${
     nome?.split(" ")[nome?.split(" ").length - 1]
   }`;
+
+  console.log(admin);
   return (
     <nav className="max-w-[400px] relative">
       <p className="bg-[#00459E] flex gap-2 text-xl text-white py-5 px-10">

@@ -418,7 +418,7 @@ function CadastrarVoluntarioForm() {
               <Image className="animate-spin" src={Spinner} alt="" />
             </span>
           ) : (
-            "Cadastrar Evento"
+            "Cadastrar Voluntário"
           )}
         </button>
       </form>

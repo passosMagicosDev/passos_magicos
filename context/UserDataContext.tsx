@@ -1,4 +1,5 @@
 "use client";
+import { useSession } from "next-auth/react";
 import { UserData } from "@/app/app/layout";
 import {
   ReactNode,
@@ -31,14 +32,13 @@ export const DataUserProvider = ({ children }: { children: ReactNode }) => {
     nome: "",
   });
 
+  const emailUser = sessionStorage.getItem("email_user") || "";
+
   useEffect(() => {
     const fetchData = async () => {
-      const userDataFetch = await fetch(
-        `/api/data-user?email=erosmariano1@gmail.com`,
-        {
-          method: "GET",
-        }
-      );
+      const userDataFetch = await fetch(`/api/data-user?email=${emailUser}`, {
+        method: "GET",
+      });
       if (!userDataFetch.ok) return;
       const result = await userDataFetch.json();
       setData(result);
