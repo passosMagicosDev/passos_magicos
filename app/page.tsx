@@ -44,6 +44,7 @@ export default function App() {
 
             <div className="flex gap-5">
               <Link
+                target="_blank"
                 href="https://forms.gle/N19W9FyP8b4CLLEJ8"
                 className="block w-max py-3 px-10 rounded bg-transparent text-base font-medium text-white border"
               >
