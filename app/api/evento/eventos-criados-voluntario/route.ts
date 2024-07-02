@@ -28,6 +28,7 @@ export async function GET(request: NextRequest) {
         inscritos: true,
       },
     });
+    console.log(eventos);
 
     return NextResponse.json(formatarEvento(eventos), { status: 200 });
   } catch (error) {
@@ -84,6 +85,7 @@ function formatarEvento(eventos: Evento[]): FormattedEvento[] {
         categoria: evento.categoriaEvento,
         quantidadeDePessoas: evento.quantidadeDePessoas,
         inscritos: evento.inscritos,
+        criadorId: evento.criadorId,
       };
     })
     .filter((evento) => evento !== null) as FormattedEvento[];
@@ -125,4 +127,5 @@ export interface FormattedEvento {
   desc: string | null;
   categoria: string | null;
   quantidadeDePessoas: number | null;
+  criadorId: number;
 }

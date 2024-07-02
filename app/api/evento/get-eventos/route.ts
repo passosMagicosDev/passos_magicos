@@ -72,6 +72,7 @@ function formatarEvento(evento: EventoPrisma): FormattedEvento | null {
     categoria: String(evento.categoriaEvento),
     quantidadeDePessoas: Number(evento.quantidadeDePessoas),
     inscritos: evento.inscritos,
+    criadorId: evento.criadorId,
   };
 }
 
@@ -112,4 +113,5 @@ export interface FormattedEvento {
   categoria: string;
   quantidadeDePessoas: number;
   inscritos: Inscrito[];
+  criadorId: number;
 }

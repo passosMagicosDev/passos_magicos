@@ -126,6 +126,7 @@ function formatarEvento(
         categoria: evento.categoriaEvento || null,
         quantidadeDePessoas: evento.quantidadeDePessoas || null,
         inscritos: evento.inscritos,
+        criadorId: evento.criadorId,
       };
     })
     .filter((evento): evento is FormattedEvento => evento !== null);
@@ -168,4 +169,5 @@ export interface FormattedEvento {
   categoria: string | null;
   quantidadeDePessoas: number | null;
   inscritos: [];
+  criadorId: number;
 }
