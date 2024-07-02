@@ -18,10 +18,10 @@ function ControlerEventos() {
     setActiveEventId(activeEventId === eventId ? null : eventId);
   };
 
-  function updateEventDeletado(idEventDeltado: number) {
+  function updateEventDeletado(idEventDeletado: number) {
     if (eventos) {
-      const filtered: EventoDetalhado[] = eventos?.filter(
-        (el) => el.idEvento !== idEventDeltado
+      const filtered: EventoDetalhado[] = eventos.filter(
+        (el) => el.idEvento !== idEventDeletado
       );
       setEventos(filtered);
       sessionStorage.setItem("eventosCache", JSON.stringify(filtered));
@@ -31,25 +31,22 @@ function ControlerEventos() {
   useEffect(() => {
     const fetchEventos = async () => {
       try {
+        const cache = sessionStorage.getItem("eventosCache");
+        const cacheParam = cache ? `&cache=${encodeURIComponent(cache)}` : "";
         const response = await fetch(
-          `/api/evento/eventos-criados-voluntario?id=${id}`
+          `/api/evento/eventos-criados-voluntario?id=${id}${cacheParam}`
         );
 
         if (!response.ok) {
           notifyError("Failed to fetch eventos");
           return;
         }
-        const data: EventoDetalhado[] = await response.json();
-        if (data) {
-          setEventos(data);
 
-          const cache = sessionStorage.getItem("eventosCache");
-          if (cache) {
-            const cacheArray: Evento[] = JSON.parse(cache);
-            const updateCache = [...cacheArray, data];
-            sessionStorage.setItem("eventosCache", JSON.stringify(updateCache));
-          }
-        }
+        const data = await response.json();
+        const eventosCriados = data.eventosCriados;
+        setEventos(eventosCriados);
+
+        sessionStorage.setItem("eventosCache", JSON.stringify(eventosCriados));
       } catch (error) {
         notifyError((error as Error).message);
       }
@@ -58,7 +55,10 @@ function ControlerEventos() {
     const cache = sessionStorage.getItem("eventosCache");
     if (cache) {
       const getCache = JSON.parse(cache);
-      setEventos(getCache);
+      const itemsUser = getCache.filter(
+        (el: { criadorId: number | undefined }) => el.criadorId === id
+      );
+      setEventos(itemsUser);
     } else {
       fetchEventos();
     }
@@ -69,19 +69,17 @@ function ControlerEventos() {
       <ToastContainer />
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 w-full">
         {eventos && eventos.length >= 1 ? (
-          eventos.map((el) => {
-            return (
-              <EventosCadastrados
-                updateEventDeletado={updateEventDeletado}
-                notifyError={notifyError}
-                notifySuccess={notifySuccess}
-                key={el.idEvento}
-                evento={el}
-                isActive={activeEventId === el.idEvento}
-                onToggleActive={handleToggleActive}
-              />
-            );
-          })
+          eventos.map((el) => (
+            <EventosCadastrados
+              updateEventDeletado={updateEventDeletado}
+              notifyError={notifyError}
+              notifySuccess={notifySuccess}
+              key={el.idEvento}
+              evento={el}
+              isActive={activeEventId === el.idEvento}
+              onToggleActive={handleToggleActive}
+            />
+          ))
         ) : (
           <p>Você não possui em nenhum evento.</p>
         )}

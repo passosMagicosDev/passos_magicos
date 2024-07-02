@@ -9,10 +9,7 @@ import { useDataUser } from "@/context/UserDataContext";
 import Logo from "@/public/imgs/logo.png";
 import SignOutMobile from "../signOutMobile";
 function NavbarMobile() {
-  const { nome, admin } = useDataUser();
-  const formatedName = `${nome?.split(" ")[0]} ${
-    nome?.split(" ")[nome?.split(" ").length - 1]
-  }`;
+  const { admin } = useDataUser();
 
   const [active, setActive] = useState(false);
   return (
@@ -23,7 +20,7 @@ function NavbarMobile() {
           onClick={() => setActive(!active)}
           data-collapse-toggle="navbar-default"
           type="button"
-          className="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
+          className="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg xl:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
           aria-controls="navbar-default"
           aria-expanded="false"
         >
@@ -37,24 +34,24 @@ function NavbarMobile() {
           >
             <path
               stroke="currentColor"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
               d="M1 1h15M1 7h15M1 13h15"
             />
           </svg>
         </button>
         <div
-          className={`${active ? "" : "hidden"} w-full md:block md:w-auto`}
+          className={`${active ? "" : "hidden"} w-full xl:block xl:w-auto`}
           id="navbar-default"
         >
-          <ul className="font-medium flex flex-col p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 rtl:space-x-reverse md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
+          <ul className="font-medium flex flex-col p-4 xl:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 xl:flex-row xl:space-x-8 rtl:space-x-reverse xl:mt-0 xl:border-0 xl:bg-white dark:bg-gray-800 xl:dark:bg-gray-900 dark:border-gray-700">
             {admin
               ? itemsNavBarAdmin.map((el) => (
                   <li
                     onClick={() => setActive(!active)}
                     key={el.item}
-                    className="block py-2 px-3 text-white rounded md:bg-transparent md:text-blue-700 md:p-0"
+                    className="block py-2 px-3 text-white rounded xl:bg-transparent xl:text-blue-700 xl:p-0"
                   >
                     <Link href={el.url} className="flex gap-5">
                       <Image src={el.img} alt="" />
