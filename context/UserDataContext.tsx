@@ -32,10 +32,9 @@ export const DataUserProvider = ({ children }: { children: ReactNode }) => {
     nome: "",
   });
 
-  const emailUser = sessionStorage.getItem("email_user") || "";
-
   useEffect(() => {
     const fetchData = async () => {
+      const emailUser = sessionStorage.getItem("email_user") || "";
       const userDataFetch = await fetch(`/api/data-user?email=${emailUser}`, {
         method: "GET",
       });

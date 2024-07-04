@@ -57,7 +57,7 @@ function RenderCardsMeusVoluntariados() {
       <h1 className="text-xl text-[#333] p-5 bg-[#F2F2F2] w-full">
         Meus Voluntariados
       </h1>
-      <div className="p-5">
+      <div className="p-5 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
         {data.length === 0 ? (
           <p>Você não está inscrito em nenhum evento.</p>
         ) : (

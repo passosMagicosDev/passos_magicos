@@ -118,6 +118,20 @@ export default function Calendar() {
     return <LoadingCalendar />;
   }
 
+  const reserveDB: Evento[] = [
+    {
+      categoria: "",
+      desc: "",
+      dia: 0,
+      formatted_data: "",
+      hora: "",
+      id: 0,
+      local: "",
+      mes: 0,
+      quantidadeDePessoas: 0,
+      title: "",
+    },
+  ];
   return (
     <section>
       <Modal
@@ -137,10 +151,17 @@ export default function Calendar() {
         setAtualYear={setAtualYear}
         setMesAtual={setMesAtual}
       />
-      {eventosDB.length >= 1 && (
+      {eventosDB.length >= 0 ? (
         <RenderCalendar
           calendario={calendario}
           eventosDB={eventosDB}
+          mesAtual={mesAtual}
+          openModal={openModal}
+        />
+      ) : (
+        <RenderCalendar
+          calendario={calendario}
+          eventosDB={reserveDB}
           mesAtual={mesAtual}
           openModal={openModal}
         />
