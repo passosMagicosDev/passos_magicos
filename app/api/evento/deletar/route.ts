@@ -11,16 +11,28 @@ export async function DELETE(request: Request) {
   }
 
   try {
-    const data = await prisma.evento.delete({
-      where: {
-        id: Number(id),
-      },
+    const deletedEvento = await prisma.$transaction(async (prisma) => {
+      await prisma.eventoToVoluntario.deleteMany({
+        where: {
+          eventoId: Number(id),
+        },
+      });
+
+      const evento = await prisma.evento.delete({
+        where: {
+          id: Number(id),
+        },
+      });
+
+      return evento;
     });
+
     return NextResponse.json({
       message: "Evento deletado com sucesso",
-      idDeletado: data.id,
+      idDeletado: deletedEvento.id,
     });
   } catch (error) {
+    console.log(error);
     return NextResponse.json(
       { error: "Erro ao deletar evento" },
       { status: 500 }
